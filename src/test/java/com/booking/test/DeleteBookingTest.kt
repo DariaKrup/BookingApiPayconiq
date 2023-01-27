@@ -1,8 +1,8 @@
 package com.booking.test
 
-import com.booking.api.AuthApi
 import com.booking.api.BookingApi
 import com.booking.api.DeleteBookingApi
+import org.apache.http.HttpStatus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -18,6 +18,6 @@ open class DeleteBookingTest : BookingApiTest() {
         print(booking)
 
         val response = deleteBookingApi.delete(id)
-        assertEquals(201, response.statusCode)
+        assertEquals(HttpStatus.SC_CREATED, response.statusCode)
     }
 }

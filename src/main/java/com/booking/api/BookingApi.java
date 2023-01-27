@@ -4,6 +4,7 @@ import com.booking.Mapper;
 import com.booking.api.vo.Booking;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.apache.http.HttpStatus;
 
 import static io.restassured.RestAssured.given;
 
@@ -18,7 +19,7 @@ public class BookingApi {
 
     public static Booking get(final long id) {
         final var rsp = RestAssured.get(URL + "/" + id);
-        if (rsp.statusCode() == 404) {
+        if (rsp.statusCode() == HttpStatus.SC_NOT_FOUND) {
             return null;
         }
         return rsp.as(Booking.class, Mapper.getJsonMapper());
