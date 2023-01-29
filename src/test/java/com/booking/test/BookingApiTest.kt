@@ -11,17 +11,11 @@ import java.time.LocalDate
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 open class BookingApiTest {
 
-    protected val token: String? = AuthApi.createToken()
     protected lateinit var bookingApi: BookingApi
 
     @BeforeAll
     fun setUp() {
-        bookingApi = BookingApi(token)
-    }
-
-    @JvmName("getAuthToken")
-    fun getToken(): String? {
-        return token
+        bookingApi = BookingApi(AuthApi.createToken())
     }
 
     protected fun booking(

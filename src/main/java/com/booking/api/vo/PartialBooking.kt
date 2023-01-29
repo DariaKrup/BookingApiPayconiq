@@ -1,21 +1,21 @@
 package com.booking.api.vo
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.LocalDate
 
-class PartialBooking (firstName: String?, lastName: String?, totalPrice: Long?, depositPaid: Boolean?, bookingDates: BookingDates?, additionalNeeds: String?) {
-    public var values: HashMap<String, Any> = HashMap()
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class PartialBooking(
+        @JsonProperty("firstname") val firstName: String? = null,
+        @JsonProperty("lastname") val lastName: String? = null,
+        @JsonProperty("totalprice") val totalPrice: Long? = null,
+        @JsonProperty("depositpaid") val depositPaid: Boolean? = null,
+        @JsonProperty("bookingdates") val bookingDates: BookingDates? = null,
+        @JsonProperty("additionalneeds") val additionalNeeds: String? = null
+)
 
-    init {
-        if (firstName != null)
-            values["firstname"] = firstName
-        if (lastName != null)
-            values["lastname"] = lastName
-        if (totalPrice != null)
-            values["totalprice"] = totalPrice
-        if (depositPaid != null)
-            values["depositpaid"] = depositPaid
-        if (bookingDates != null)
-            values["bookingdates"] = bookingDates
-        if (additionalNeeds != null)
-            values["additionalneeds"] = additionalNeeds
-    }
-}
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class PartialBookingDates(
+        @JsonProperty("checkin") val checkIn: LocalDate? = null,
+        @JsonProperty("checkout") val checkOut: LocalDate? = null
+)
