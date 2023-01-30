@@ -8,8 +8,10 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Cookie;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
@@ -40,36 +42,30 @@ public class BookingApi {
     }
 
     public Response partialUpdate(final String id, final PartialBooking rq) {
-        return partialUpdate(id, rq, new Cookie.Builder("token", token).build());
+        return partialUpdate(id, rq, token);
     }
 
-    public Response partialUpdate(final String id, final PartialBooking rq, Cookie cookie) {
-        if (cookie != null) {
-            return given()
-                    .body(rq, Mapper.getJsonMapper())
-                    .contentType(ContentType.JSON)
-                    .header("Accept", "application/json")
-                    .cookie(cookie)
-                    .when()
-                    .patch(URL + "/" + id);
-        } else {
-            return given()
-                    .body(rq, Mapper.getJsonMapper())
-                    .contentType(ContentType.JSON)
-                    .header("Accept", "application/json")
-                    .when()
-                    .patch(URL + "/" + id);
+    public Response partialUpdate(final String id, @NotNull final PartialBooking rq, final String token) {
+        var spec = given()
+                .body(rq, Mapper.getJsonMapper())
+                .contentType(ContentType.JSON)
+                .header("Accept", "application/json");
+        if (token != null) {
+            spec = spec.cookie(new Cookie.Builder("token", token).build());
         }
+        return spec.when().patch(URL + "/" + id);
     }
 
-    public <V> Response partialUpdatePlain(final String id, final HashMap<String, V> rq) {
-        return given()
-                .body(rq)
+    public <V> Response partialUpdatePlain(final String id, final Map<String, V> rq) {
+        var spec = given()
                 .contentType(ContentType.JSON)
                 .header("Accept", "application/json")
-                .cookie(new Cookie.Builder("token", token).build())
-                .when()
-                .patch(URL + "/" + id);
+                .cookie(new Cookie.Builder("token", token).build());
+        if (rq != null) {
+            spec = spec.body(rq);
+
+        }
+        return spec.when().patch(URL + "/" + id);
     }
 
     public Response delete(final String id) {
