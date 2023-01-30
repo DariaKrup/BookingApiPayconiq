@@ -63,7 +63,6 @@ public class BookingApi {
                 .cookie(new Cookie.Builder("token", token).build());
         if (rq != null) {
             spec = spec.body(rq);
-
         }
         return spec.when().patch(URL + "/" + id);
     }
@@ -83,7 +82,6 @@ public class BookingApi {
 
     public<V> Response getIds(HashMap<String, V> pathParams) {
         return given()
-                .contentType(ContentType.JSON)
                 .params(pathParams)
                 .when()
                 .get(URL);

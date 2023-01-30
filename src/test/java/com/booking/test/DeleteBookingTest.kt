@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-@DisplayName("Delete booking")
+@DisplayName("DeleteBooking")
 class DeleteBookingTest : BookingApiTest() {
 
     @Test
@@ -23,7 +23,7 @@ class DeleteBookingTest : BookingApiTest() {
     @Test
     fun `Double delete by id`() {
         val id = BookingApi.create(booking())
-        bookingApi.delete(id.toString())
+        bookingApi.delete(id)
 
         val response = bookingApi.delete(id)
 

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
-@DisplayName("Get ids")
+@DisplayName("GetBookingIds")
 class GetIdsTest : BookingApiTest() {
 
     @Test
@@ -27,7 +27,7 @@ class GetIdsTest : BookingApiTest() {
     @Test
     fun `Check existence after deletion`() {
         val id = BookingApi.create(booking())
-        bookingApi.delete(id.toString())
+        bookingApi.delete(id)
 
         val response = bookingApi.getIds()
 
