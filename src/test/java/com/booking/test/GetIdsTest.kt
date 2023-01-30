@@ -82,7 +82,7 @@ class GetIdsTest : BookingApiTest() {
 
     @Test
     fun `Get booking with absorption of checkin-checkout period`() {
-        val id = BookingApi.create(booking(firstName = "Chandler", lastName = "Bing",
+        val id = BookingApi.create(booking(
             bookingDates = BookingDates(
                 LocalDate.of(2011, 12, 30),
                 LocalDate.of(2011, 12, 31)
@@ -100,7 +100,7 @@ class GetIdsTest : BookingApiTest() {
 
     @Test
     fun `Get booking with intersection of checkin-checkout period on the left border`() {
-        val id = BookingApi.create(booking(firstName = "Chandler", lastName = "Bing",
+        val id = BookingApi.create(booking(
             bookingDates = BookingDates(
                 LocalDate.of(2011, 12, 30),
                 LocalDate.of(2011, 12, 31)
@@ -117,7 +117,7 @@ class GetIdsTest : BookingApiTest() {
 
     @Test
     fun `Get booking with intersection of checkin-checkout period on the right border`() {
-        val id = BookingApi.create(booking(firstName = "Chandler", lastName = "Bing",
+        val id = BookingApi.create(booking(
             bookingDates = BookingDates(
                 LocalDate.of(2011, 12, 30),
                 LocalDate.of(2012, 12, 31)
@@ -135,7 +135,7 @@ class GetIdsTest : BookingApiTest() {
 
     @Test
     fun `Get booking from right interval without intersection of checkin-checkout period`() {
-        val id = BookingApi.create(booking(firstName = "Chandler", lastName = "Bing",
+        val id = BookingApi.create(booking(
             bookingDates = BookingDates(
                 LocalDate.of(2011, 12, 30),
                 LocalDate.of(2011, 12, 31)
@@ -147,13 +147,13 @@ class GetIdsTest : BookingApiTest() {
         val response = bookingApi.getIds(filter)
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
-        assertTrue(response.body().jsonPath().getList<HashMap<String, Int>>("$")
+        assertFalse(response.body().jsonPath().getList<HashMap<String, Int>>("$")
             .contains(hashMapOf("bookingid" to id.toInt())))
     }
 
     @Test
     fun `Get booking from left interval without intersection of checkin-checkout period`() {
-        val id = BookingApi.create(booking(firstName = "Chandler", lastName = "Bing",
+        val id = BookingApi.create(booking(
             bookingDates = BookingDates(
                 LocalDate.of(2011, 12, 30),
                 LocalDate.of(2011, 12, 31)
@@ -171,7 +171,7 @@ class GetIdsTest : BookingApiTest() {
 
     @Test
     fun `Get booking from left interval with intersection of checkin-checkout period`() {
-        val id = BookingApi.create(booking(firstName = "Chandler", lastName = "Bing",
+        val id = BookingApi.create(booking(
             bookingDates = BookingDates(
                 LocalDate.of(2011, 12, 30),
                 LocalDate.of(2012, 1, 5)
@@ -198,7 +198,7 @@ class GetIdsTest : BookingApiTest() {
     }
 
     @Test
-    fun `Get booking with incorrect date format`() {
+    fun `Get booking with incorrect month and date value`() {
         BookingApi.create(booking())
 
         val response = bookingApi.getIds(hashMapOf("checkin" to "2012-33-77"))

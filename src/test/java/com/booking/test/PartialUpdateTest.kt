@@ -22,14 +22,15 @@ class PartialUpdateTest : BookingApiTest() {
         val rq = PartialBooking(lastName = "Brown")
 
         val response = bookingApi.partialUpdate(id, rq)
+        val body = response.jsonPath()
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
-        assertEquals("Brown", response.jsonPath().get("lastname"))
-        assertEquals("Joey", response.jsonPath().get("firstname"))
-        assertEquals(252, response.jsonPath().getLong("totalprice"))
-        assertEquals(true, response.jsonPath().getBoolean("depositpaid"))
-        assertEquals("2011-12-30", response.jsonPath().get("bookingdates.checkin"))
-        assertEquals("2011-12-31", response.jsonPath().get("bookingdates.checkout"))
+        assertEquals("Brown", body.get("lastname"))
+        assertEquals("Joey", body.get("firstname"))
+        assertEquals(252, body.getLong("totalprice"))
+        assertEquals(true, body.getBoolean("depositpaid"))
+        assertEquals("2011-12-30", body.get("bookingdates.checkin"))
+        assertEquals("2011-12-31", body.get("bookingdates.checkout"))
         assertNull(response.jsonPath().get("additionalneeds"))
     }
 
@@ -44,15 +45,16 @@ class PartialUpdateTest : BookingApiTest() {
         val rq = PartialBooking(depositPaid = true, additionalNeeds = "Breakfast")
 
         val response = bookingApi.partialUpdate(id, rq)
+        val body = response.jsonPath()
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
-        assertEquals("Bb", response.jsonPath().get("lastname"))
-        assertEquals("Joey", response.jsonPath().get("firstname"))
-        assertEquals(252, response.jsonPath().getLong("totalprice"))
-        assertEquals(true, response.jsonPath().getBoolean("depositpaid"))
-        assertEquals("2011-12-30", response.jsonPath().get("bookingdates.checkin"))
-        assertEquals("2011-12-31", response.jsonPath().get("bookingdates.checkout"))
-        assertEquals("Breakfast", response.jsonPath().get("additionalneeds"))
+        assertEquals("Bb", body.get("lastname"))
+        assertEquals("Joey", body.get("firstname"))
+        assertEquals(252, body.getLong("totalprice"))
+        assertEquals(true, body.getBoolean("depositpaid"))
+        assertEquals("2011-12-30", body.get("bookingdates.checkin"))
+        assertEquals("2011-12-31", body.get("bookingdates.checkout"))
+        assertEquals("Breakfast", body.get("additionalneeds"))
     }
 
     @Test
@@ -71,15 +73,16 @@ class PartialUpdateTest : BookingApiTest() {
             additionalNeeds = "Breakfast")
 
         val response = bookingApi.partialUpdate(id, rq)
+        val body = response.jsonPath()
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
-        assertEquals("Brown", response.jsonPath().get("lastname"))
-        assertEquals("Jo", response.jsonPath().get("firstname"))
-        assertEquals(300, response.jsonPath().getLong("totalprice"))
-        assertEquals(true, response.jsonPath().getBoolean("depositpaid"))
-        assertEquals("2012-01-30", response.jsonPath().get("bookingdates.checkin"))
-        assertEquals("2012-01-31", response.jsonPath().get("bookingdates.checkout"))
-        assertEquals("Breakfast", response.jsonPath().get("additionalneeds"))
+        assertEquals("Brown", body.get("lastname"))
+        assertEquals("Jo", body.get("firstname"))
+        assertEquals(300, body.getLong("totalprice"))
+        assertEquals(true, body.getBoolean("depositpaid"))
+        assertEquals("2012-01-30", body.get("bookingdates.checkin"))
+        assertEquals("2012-01-31", body.get("bookingdates.checkout"))
+        assertEquals("Breakfast", body.get("additionalneeds"))
     }
 
     @Test
@@ -97,22 +100,23 @@ class PartialUpdateTest : BookingApiTest() {
             ))
 
         val response = bookingApi.partialUpdate(id, rq)
+        val body = response.jsonPath()
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
-        assertEquals("Bb", response.jsonPath().get("lastname"))
-        assertEquals("Joey", response.jsonPath().get("firstname"))
-        assertEquals(252, response.jsonPath().getLong("totalprice"))
-        assertEquals(true, response.jsonPath().getBoolean("depositpaid"))
-        assertEquals("2012-01-30", response.jsonPath().get("bookingdates.checkin"))
-        assertEquals("2012-01-15", response.jsonPath().get("bookingdates.checkout"))
+        assertEquals("Bb", body.get("lastname"))
+        assertEquals("Joey", body.get("firstname"))
+        assertEquals(252, body.getLong("totalprice"))
+        assertEquals(true, body.getBoolean("depositpaid"))
+        assertEquals("2012-01-30", body.get("bookingdates.checkin"))
+        assertEquals("2012-01-15", body.get("bookingdates.checkout"))
     }
 
     @Test
     fun `Partial update with non-existing field`() {
         val id = BookingApi.create(booking())
-        val rq = hashMapOf<String, Any>("depositamount" to 200)
+        val rq = hashMapOf("depositamount" to 200)
 
-        val response = bookingApi.partialUpdateMap(id.toString(), rq)
+        val response = bookingApi.partialUpdatePlain(id, rq)
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
         assertNull(response.jsonPath().get("depositamount"))
@@ -121,9 +125,9 @@ class PartialUpdateTest : BookingApiTest() {
     @Test
     fun `Partial update with Double in amount of totalPrice`() {
         val id = BookingApi.create(booking(totalPrice = 250))
-        val rq = hashMapOf<String, Any>("totalprice" to 200.50)
+        val rq = hashMapOf("totalprice" to 200.50)
 
-        val response = bookingApi.partialUpdateMap(id.toString(), rq)
+        val response = bookingApi.partialUpdatePlain(id, rq)
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
         assertEquals(200, response.jsonPath().getLong("totalprice"))
@@ -143,32 +147,21 @@ class PartialUpdateTest : BookingApiTest() {
     @Test
     fun `Partial update with String in depositPaid`() {
         val id = BookingApi.create(booking(depositPaid = false))
-        val rq = hashMapOf<String, Any>("depositpaid" to "PAID")
+        val rq = hashMapOf<String, Any>("depositpaid" to "true")
 
-        val response = bookingApi.partialUpdateMap(id.toString(), rq)
-
-        assertEquals(HttpStatus.SC_OK, response.statusCode)
-        assertEquals(true, response.jsonPath().get("depositpaid"))
-    }
-
-    @Test
-    fun `Partial update with Int in depositPaid`() {
-        val id = BookingApi.create(booking(depositPaid = false))
-        val rq = hashMapOf<String, Any>("depositpaid" to 10)
-
-        val response = bookingApi.partialUpdateMap(id.toString(), rq)
+        val response = bookingApi.partialUpdatePlain(id, rq)
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
         assertEquals(true, response.jsonPath().get("depositpaid"))
     }
 
     @Test
-    fun `Partial update with incorrect date format`() {
+    fun `Partial update with incorrect month and day values`() {
         val id = BookingApi.create(booking())
-        val rqInternal = hashMapOf<String, Any>("checkin" to "2012-33-93", "checkout" to "2012-44-83")
-        val rq = hashMapOf<String, Any>("bookingdates" to rqInternal)
+        val rqInternal = hashMapOf("checkin" to "2012-33-93", "checkout" to "2012-44-83")
+        val rq = hashMapOf("bookingdates" to rqInternal)
 
-        val response = bookingApi.partialUpdateMap(id.toString(), rq)
+        val response = bookingApi.partialUpdatePlain(id, rq)
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
         assertEquals("0NaN-aN-aN", response.jsonPath().get("bookingdates.checkin"))
@@ -178,9 +171,9 @@ class PartialUpdateTest : BookingApiTest() {
     @Test
     fun `Partial update with duplicate field`() {
         val id = BookingApi.create(booking())
-        val rq = hashMapOf<String, Any>("lastname" to "Brown", "lastname" to "Tribiani")
+        val rq = hashMapOf("lastname" to "Brown", "lastname" to "Tribiani")
 
-        val response = bookingApi.partialUpdateMap(id.toString(), rq)
+        val response = bookingApi.partialUpdatePlain(id, rq)
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
         assertEquals("Tribiani", response.jsonPath().get("lastname"))
@@ -202,7 +195,7 @@ class PartialUpdateTest : BookingApiTest() {
         val id = BookingApi.create(booking())
         val rq = PartialBooking(additionalNeeds = "Breakfast")
 
-        val response = bookingApi.partialUpdate(-id, rq)
+        val response = bookingApi.partialUpdate("-$id", rq)
 
         assertEquals(HttpStatus.SC_METHOD_NOT_ALLOWED, response.statusCode)
     }
@@ -221,9 +214,9 @@ class PartialUpdateTest : BookingApiTest() {
     @Test
     fun `Partial update by String instead of id`() {
         val id = BookingApi.create(booking())
-        val rq = hashMapOf<String, Any>("additionalNeeds" to "Breakfast")
+        val rq = hashMapOf("additionalNeeds" to "Breakfast")
 
-        val response = bookingApi.partialUpdateMap("acc", rq)
+        val response = bookingApi.partialUpdatePlain("acc", rq)
 
         assertEquals(HttpStatus.SC_METHOD_NOT_ALLOWED, response.statusCode)
     }

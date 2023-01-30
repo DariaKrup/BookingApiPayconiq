@@ -23,7 +23,7 @@ public class BookingApi {
         this.token = token;
     }
 
-    public static Booking get(final long id) {
+    public static Booking get(final String id) {
         final var rsp = RestAssured.get(URL + "/" + id);
         if (rsp.statusCode() == HttpStatus.SC_NOT_FOUND) {
             return null;
@@ -31,20 +31,20 @@ public class BookingApi {
         return rsp.as(Booking.class, Mapper.getJsonMapper());
     }
 
-    public static long create(Booking rq) {
+    public static String create(Booking rq) {
         return given()
                 .body(rq, Mapper.getJsonMapper())
                 .contentType(ContentType.JSON)
                 .when()
                 .post(URL)
-                .jsonPath().getLong("bookingid");
+                .jsonPath().getString("bookingid");
     }
 
-    public Response partialUpdate(final long id, final PartialBooking rq) {
+    public Response partialUpdate(final String id, final PartialBooking rq) {
         return partialUpdate(id, rq, new Cookie.Builder("token", token).build());
     }
 
-    public Response partialUpdate(final long id, final PartialBooking rq, Cookie cookie) {
+    public Response partialUpdate(final String id, final PartialBooking rq, Cookie cookie) {
         if (cookie != null) {
             return given()
                     .body(rq, Mapper.getJsonMapper())
@@ -63,7 +63,7 @@ public class BookingApi {
         }
     }
 
-    public Response partialUpdateMap(final String id, final HashMap rq) {
+    public <V> Response partialUpdatePlain(final String id, final HashMap<String, V> rq) {
         return given()
                 .body(rq)
                 .contentType(ContentType.JSON)
@@ -86,26 +86,16 @@ public class BookingApi {
     }
 
     public Response getIds(BookingFilter filter) {
-        if (filter != null) {
-            return given()
-                    .contentType(ContentType.JSON)
-                    .accept(ContentType.JSON)
-                    .body(filter)
-                    .when()
-                    .get(URL);
-        } else {
-            return given()
-                    .contentType(ContentType.JSON)
-                    .accept(ContentType.JSON)
-                    .when()
-                    .get(URL);
-        }
+        return given()
+                .contentType(ContentType.JSON)
+                .body(filter)
+                .when()
+                .get(URL);
     }
 
     public Response getIds(HashMap filter) {
         return given()
                 .contentType(ContentType.JSON)
-                .accept(ContentType.JSON)
                 .body(filter)
                 .when()
                 .get(URL);

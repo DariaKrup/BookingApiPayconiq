@@ -21,8 +21,8 @@ class DeleteBookingTest : BookingApiTest() {
     @Test
     fun `Double delete by id`() {
         val id = BookingApi.create(booking())
-
         bookingApi.delete(id.toString())
+
         val response = bookingApi.delete(id.toString())
 
         assertEquals(HttpStatus.SC_METHOD_NOT_ALLOWED, response.statusCode)
@@ -30,7 +30,7 @@ class DeleteBookingTest : BookingApiTest() {
 
     @Test
     fun `Delete by String instead of id`() {
-        val id = BookingApi.create(booking())
+        BookingApi.create(booking())
 
         val response = bookingApi.delete("acc")
 
@@ -41,7 +41,7 @@ class DeleteBookingTest : BookingApiTest() {
     fun `Delete by negative id`() {
         val id = BookingApi.create(booking())
 
-        val response = bookingApi.delete((-id).toString())
+        val response = bookingApi.delete(("-$id").toString())
 
         assertEquals(HttpStatus.SC_METHOD_NOT_ALLOWED, response.statusCode)
     }
