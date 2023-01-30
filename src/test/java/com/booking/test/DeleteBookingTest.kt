@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 class DeleteBookingTest : BookingApiTest() {
 
     @Test
-    fun `By id`() {
+    fun `Should be not presented`() {
         val id = BookingApi.create(booking())
 
         val response = bookingApi.delete(id)
@@ -21,7 +21,7 @@ class DeleteBookingTest : BookingApiTest() {
     }
 
     @Test
-    fun `Double delete by id`() {
+    fun `Should not be allowed to delete twice`() {
         val id = BookingApi.create(booking())
         bookingApi.delete(id)
 
@@ -34,14 +34,14 @@ class DeleteBookingTest : BookingApiTest() {
     @DisplayName("Incorrect format")
     inner class IncorrectFormat {
         @Test
-        fun `String instead of id`() {
+        fun `Should not be allowed to use String instead of id`() {
             val response = bookingApi.delete("acc")
 
             assertEquals(HttpStatus.SC_METHOD_NOT_ALLOWED, response.statusCode)
         }
 
         @Test
-        fun `Negative id`() {
+        fun `Should not be allowed to use negative id`() {
             val id = BookingApi.create(booking())
 
             val response = bookingApi.delete("-$id")
