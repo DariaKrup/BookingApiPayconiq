@@ -2,7 +2,6 @@ package com.booking.api;
 
 import com.booking.Mapper;
 import com.booking.api.vo.Booking;
-import com.booking.api.vo.BookingFilter;
 import com.booking.api.vo.PartialBooking;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -82,21 +81,14 @@ public class BookingApi {
     }
 
     public Response getIds() {
-        return getIds(new BookingFilter());
+        return getIds(new HashMap<>());
     }
 
-    public Response getIds(BookingFilter filter) {
-        return given()
-                .contentType(ContentType.JSON)
-                .body(filter)
-                .when()
-                .get(URL);
-    }
 
-    public Response getIds(HashMap filter) {
+    public<V> Response getIds(HashMap<String, V> pathParams) {
         return given()
                 .contentType(ContentType.JSON)
-                .body(filter)
+                .params(pathParams)
                 .when()
                 .get(URL);
     }
