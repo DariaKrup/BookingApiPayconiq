@@ -3,6 +3,7 @@ package com.booking.test
 import com.booking.api.BookingApi
 import com.booking.api.vo.BookingDates
 import com.booking.api.vo.PartialBooking
+import io.restassured.response.Response
 import org.apache.http.HttpStatus
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
@@ -14,79 +15,74 @@ import java.time.LocalDate
 class GetIdsTest : BookingApiTest() {
 
     @Test
-    fun `Check existence`() {
+    fun `Should include when no filters`() {
         val id = BookingApi.create(booking())
 
         val response = bookingApi.getIds()
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
-        assertTrue(response.body().jsonPath().getList<HashMap<String, Int>>("$")
-            .contains(hashMapOf("bookingid" to id.toInt())))
+        assertTrue(response.contains(id))
     }
 
     @Test
-    fun `Check existence after deletion`() {
+    fun `Should not include when non-existing id`() {
         val id = BookingApi.create(booking())
         bookingApi.delete(id)
 
         val response = bookingApi.getIds()
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
-        assertFalse(response.body().jsonPath().getList<HashMap<String, Int>>("$")
-            .contains(hashMapOf("bookingid" to id.toInt())))
+        assertFalse(response.contains(id))
     }
 
     @Nested
-    @DisplayName("Request with filter")
-    inner class filter {
+    @DisplayName("Filters by name")
+    inner class NameFilterGroup {
         @Test
-        fun `By firstname`() {
-            val id = BookingApi.create(booking(firstName = "Mathew"))
-            val filter = hashMapOf("firstname" to "Mathew")
+        fun `Should include when filtered by firstname`() {
+            val idPassing = BookingApi.create(booking(firstName = "Mathew"))
+            val idNotPassing = BookingApi.create(booking(firstName = "Andrew"))
+            val filter = mapOf("firstname" to "Mathew")
 
             val response = bookingApi.getIds(filter)
 
             assertEquals(HttpStatus.SC_OK, response.statusCode)
-            assertTrue(
-                response.body().jsonPath().getList<HashMap<String, Int>>("$")
-                    .contains(hashMapOf("bookingid" to id.toInt()))
-            )
+            assertTrue(response.contains(idPassing))
+            assertFalse(response.contains(idNotPassing))
         }
 
         @Test
-        fun `By lastname`() {
-            val id = BookingApi.create(booking(lastName = "Bing"))
-            val filter = hashMapOf("lastname" to "Bing")
+        fun `Should include when filtered by lastname`() {
+            val idPassing = BookingApi.create(booking(lastName = "Bing"))
+            val idNotPassing = BookingApi.create(booking(lastName = "Andrew"))
+            val filter = mapOf("lastname" to "Bing")
 
             val response = bookingApi.getIds(filter)
 
             assertEquals(HttpStatus.SC_OK, response.statusCode)
-            assertTrue(
-                response.body().jsonPath().getList<HashMap<String, Int>>("$")
-                    .contains(hashMapOf("bookingid" to id.toInt()))
-            )
+            assertTrue(response.contains(idPassing))
+            assertFalse(response.contains(idNotPassing))
         }
 
         @Test
-        fun `By firstname and lastname`() {
-            val id = BookingApi.create(booking(firstName = "Chandler", lastName = "Bing"))
-            val filter = hashMapOf("firstname" to "Chandler", "lastname" to "Bing")
+        fun `Should combine predicates when filtered by firstname and lastname`() {
+            val idPassing = BookingApi.create(booking(firstName = "Chandler", lastName = "Bing"))
+            val idNotPassing = BookingApi.create(booking(firstName = "Andrew", lastName = "Bing"))
+            val filter = mapOf("firstname" to "Chandler", "lastname" to "Bing")
 
             val response = bookingApi.getIds(filter)
 
             assertEquals(HttpStatus.SC_OK, response.statusCode)
-            assertTrue(
-                response.body().jsonPath().getList<HashMap<String, Int>>("$")
-                    .contains(hashMapOf("bookingid" to id.toInt()))
-            )
+            assertTrue(response.contains(idPassing))
+            assertFalse(response.contains(idNotPassing))
         }
     }
 
     @Nested
-    @DisplayName("Filters with checkin-checkout")
-    inner class TestDates {
+    @DisplayName("Filters by date")
+    inner class DateFilterGroup {
         @Test
-        fun `Checkin greater than filter date, checkout less than filter date`() {
+        fun `Should not include when checkin greater than filter, checkout less than filter`() {
             val id = BookingApi.create(
                 booking(
                     bookingDates = BookingDates(
@@ -95,7 +91,7 @@ class GetIdsTest : BookingApiTest() {
                     )
                 )
             )
-            val filter = hashMapOf(
+            val filter = mapOf(
                 "checkin" to "2011-12-28",
                 "checkout" to "2012-01-02"
             )
@@ -103,14 +99,11 @@ class GetIdsTest : BookingApiTest() {
             val response = bookingApi.getIds(filter)
 
             assertEquals(HttpStatus.SC_OK, response.statusCode)
-            assertFalse(
-                response.body().jsonPath().getList<HashMap<String, Int>>("$")
-                    .contains(hashMapOf("bookingid" to id.toInt()))
-            )
+            assertFalse(response.contains(id))
         }
 
         @Test
-        fun `Checkin less than filter date, checkout greater than filter date`() {
+        fun `Should not include when checkin less than filter, checkout greater than filter`() {
             val id = BookingApi.create(
                 booking(
                     bookingDates = BookingDates(
@@ -119,7 +112,7 @@ class GetIdsTest : BookingApiTest() {
                     )
                 )
             )
-            val filter = hashMapOf(
+            val filter = mapOf(
                 "checkin" to "2011-12-28",
                 "checkout" to "2011-12-30"
             )
@@ -127,14 +120,11 @@ class GetIdsTest : BookingApiTest() {
             val response = bookingApi.getIds(filter)
 
             assertEquals(HttpStatus.SC_OK, response.statusCode)
-            assertFalse(
-                response.body().jsonPath().getList<HashMap<String, Int>>("$")
-                    .contains(hashMapOf("bookingid" to id.toInt()))
-            )
+            assertFalse(response.contains(id))
         }
 
         @Test
-        fun `Checkin equal to filter date`() {
+        fun `Should include when checkin == filter`() {
             val id = BookingApi.create(
                 booking(
                     bookingDates = BookingDates(
@@ -143,19 +133,16 @@ class GetIdsTest : BookingApiTest() {
                     )
                 )
             )
-            val filter = hashMapOf("checkin" to "2011-12-30")
+            val filter = mapOf("checkin" to "2011-12-30")
 
             val response = bookingApi.getIds(filter)
 
             assertEquals(HttpStatus.SC_OK, response.statusCode)
-            assertTrue(
-                response.body().jsonPath().getList<HashMap<String, Int>>("$")
-                    .contains(hashMapOf("bookingid" to id.toInt()))
-            )
+            assertTrue(response.contains(id))
         }
 
         @Test
-        fun `Checkout equal to filter date`() {
+        fun `Should include when checkout == filter`() {
             val id = BookingApi.create(
                 booking(
                     bookingDates = BookingDates(
@@ -164,19 +151,16 @@ class GetIdsTest : BookingApiTest() {
                     )
                 )
             )
-            val filter = hashMapOf("checkout" to "2011-12-31")
+            val filter = mapOf("checkout" to "2011-12-31")
 
             val response = bookingApi.getIds(filter)
 
             assertEquals(HttpStatus.SC_OK, response.statusCode)
-            assertTrue(
-                response.body().jsonPath().getList<HashMap<String, Int>>("$")
-                    .contains(hashMapOf("bookingid" to id.toInt()))
-            )
+            assertTrue(response.contains(id))
         }
 
         @Test
-        fun `Checkin less than filter date, checkout less than filter date`() {
+        fun `Should not include when checkin less than filter, checkout less than filter`() {
             val id = BookingApi.create(
                 booking(
                     bookingDates = BookingDates(
@@ -185,7 +169,7 @@ class GetIdsTest : BookingApiTest() {
                     )
                 )
             )
-            val filter = hashMapOf(
+            val filter = mapOf(
                 "checkin" to "2014-12-30",
                 "checkout" to "2014-12-31"
             )
@@ -193,14 +177,11 @@ class GetIdsTest : BookingApiTest() {
             val response = bookingApi.getIds(filter)
 
             assertEquals(HttpStatus.SC_OK, response.statusCode)
-            assertFalse(
-                response.body().jsonPath().getList<HashMap<String, Int>>("$")
-                    .contains(hashMapOf("bookingid" to id.toInt()))
-            )
+            assertFalse(response.contains(id))
         }
 
         @Test
-        fun `Checkin greater than filter date, checkout greater than filter date`() {
+        fun `Should include when checkin greater than filter, checkout greater than filter`() {
             val id = BookingApi.create(
                 booking(
                     bookingDates = BookingDates(
@@ -209,7 +190,7 @@ class GetIdsTest : BookingApiTest() {
                     )
                 )
             )
-            val filter = hashMapOf(
+            val filter = mapOf(
                 "checkin" to "2008-12-30",
                 "checkout" to "2009-12-31"
             )
@@ -217,14 +198,11 @@ class GetIdsTest : BookingApiTest() {
             val response = bookingApi.getIds(filter)
 
             assertEquals(HttpStatus.SC_OK, response.statusCode)
-            assertTrue(
-                response.body().jsonPath().getList<HashMap<String, Int>>("$")
-                    .contains(hashMapOf("bookingid" to id.toInt()))
-            )
+            assertTrue(response.contains(id))
         }
 
         @Test
-        fun `Checkin equal to filter date, checkout greater than filter date`() {
+        fun `Should include when checkin == filter date, checkout greater than filter`() {
             val id = BookingApi.create(
                 booking(
                     bookingDates = BookingDates(
@@ -233,7 +211,7 @@ class GetIdsTest : BookingApiTest() {
                     )
                 )
             )
-            val filter = hashMapOf(
+            val filter = mapOf(
                 "checkin" to "2011-12-30",
                 "checkout" to "2012-01-03"
             )
@@ -241,14 +219,11 @@ class GetIdsTest : BookingApiTest() {
             val response = bookingApi.getIds(filter)
 
             assertEquals(HttpStatus.SC_OK, response.statusCode)
-            assertTrue(
-                response.body().jsonPath().getList<HashMap<String, Int>>("$")
-                    .contains(hashMapOf("bookingid" to id.toInt()))
-            )
+            assertTrue(response.contains(id))
         }
 
         @Test
-        fun `Checkin greater than filter date, checkout equal to filter date`() {
+        fun `Should include when checkin greater than filter, checkout == filter`() {
             val id = BookingApi.create(
                 booking(
                     bookingDates = BookingDates(
@@ -257,7 +232,7 @@ class GetIdsTest : BookingApiTest() {
                     )
                 )
             )
-            val filter = hashMapOf(
+            val filter = mapOf(
                 "checkin" to "2011-12-25",
                 "checkout" to "2012-01-05"
             )
@@ -265,54 +240,52 @@ class GetIdsTest : BookingApiTest() {
             val response = bookingApi.getIds(filter)
 
             assertEquals(HttpStatus.SC_OK, response.statusCode)
-            assertTrue(
-                response.body().jsonPath().getList<HashMap<String, Int>>("$")
-                    .contains(hashMapOf("bookingid" to id.toInt()))
-            )
+            assertTrue(response.contains(id))
         }
     }
 
     @Test
-    fun `Get booking ids check after partialUpdate on firstName`() {
+    fun `Should include after PartialUpdateBooking on firstname`() {
         val id = BookingApi.create(booking(firstName = "Ivan"))
         bookingApi.partialUpdate(id, PartialBooking(firstName = "Mathew"))
-        val filter = hashMapOf("firstname" to "Mathew")
 
-        val response = bookingApi.getIds(filter)
+        val response = bookingApi.getIds(mapOf("firstname" to "Mathew"))
 
         assertEquals(HttpStatus.SC_OK, response.statusCode)
-        assertTrue(response.body().jsonPath().getList<HashMap<String, Int>>("$")
-            .contains(hashMapOf("bookingid" to id.toInt())))
+        assertTrue(response.contains(id))
     }
 
     @Nested
     @DisplayName("Incorrect format")
     inner class IncorrectFormat {
         @Test
-        fun `Non-existing filter`() {
+        fun `Should pe positive on non-existing filter param`() {
             BookingApi.create(booking())
 
-            val response = bookingApi.getIds(hashMapOf("additionalneeds" to "Breakfast"))
+            val response = bookingApi.getIds(mapOf("additionalneeds" to "Breakfast"))
 
             assertEquals(HttpStatus.SC_OK, response.statusCode)
         }
 
         @Test
-        fun `Incorrect month and date value`() {
+        fun `Should be error when month and date have incorrect value`() {
             BookingApi.create(booking())
 
-            val response = bookingApi.getIds(hashMapOf("checkin" to "2012-33-77"))
+            val response = bookingApi.getIds(mapOf("checkin" to "2012-33-77"))
 
             assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.statusCode)
         }
 
         @Test
-        fun `Incorrect date format`() {
+        fun `Should be error on incorrect date format`() {
             BookingApi.create(booking())
 
-            val response = bookingApi.getIds(hashMapOf("checkin" to "31/12/3014"))
+            val response = bookingApi.getIds(mapOf("checkin" to "31/12/3014"))
 
             assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.statusCode)
         }
     }
+
+    private fun Response.contains(id: String) = body().jsonPath().getList<HashMap<String, Int>>("$")
+        .contains(mapOf("bookingid" to id.toInt()))
 }

@@ -80,7 +80,7 @@ public class BookingApi {
     }
 
 
-    public<V> Response getIds(HashMap<String, V> pathParams) {
+    public <V> Response getIds(final Map<String, V> pathParams) {
         return given()
                 .params(pathParams)
                 .when()
