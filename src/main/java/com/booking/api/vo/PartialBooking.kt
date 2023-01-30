@@ -10,6 +10,12 @@ data class PartialBooking(
         @JsonProperty("lastname") val lastName: String? = null,
         @JsonProperty("totalprice") val totalPrice: Long? = null,
         @JsonProperty("depositpaid") val depositPaid: Boolean? = null,
-        @JsonProperty("bookingdates") val bookingDates: BookingDates? = null,
+        @JsonProperty("bookingdates") val bookingDates: PartialBookingDates? = null,
         @JsonProperty("additionalneeds") val additionalNeeds: String? = null
+)
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class PartialBookingDates(
+        @JsonProperty("checkin") val checkIn: LocalDate? = null,
+        @JsonProperty("checkout") val checkOut: LocalDate? = null
 )

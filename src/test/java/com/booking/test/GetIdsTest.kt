@@ -208,6 +208,16 @@ class GetIdsTest : BookingApiTest() {
     }
 
     @Test
+    fun `Get booking with incorrect date format`() {
+        BookingApi.create(booking())
+
+        val response = bookingApi.getIds(hashMapOf("checkin" to "31/12/3014"))
+
+        assertEquals(HttpStatus.SC_OK, response.statusCode)
+        assertFalse(response.body().jsonPath().getList<Any>("$").isEmpty())
+    }
+
+    @Test
     fun `Get booking ids check after partialUpdate on firstName`() {
         val id = BookingApi.create(booking(firstName = "Ivan"))
         bookingApi.partialUpdate(id, PartialBooking(firstName = "Mathew"))
