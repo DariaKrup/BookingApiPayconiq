@@ -63,7 +63,7 @@ object BookingApiPayconiq_Build : BuildType({
         script {
             name = "Output of password.param"
             enabled = false
-            scriptContent = "echo %password.param% > param_output.out"
+            scriptContent = "echo %password.param% > param_output_.out"
         }
     }
 
