@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="d2583e79-dc7b-401c-aef6-d49ddb4c8376" xsi:noNamespaceSchemaLocation="https://www.jetbrains.com/teamcity/schemas/2021.1/project-config.xsd">
+  <name>BookingApiPayconiq</name>
+  <parameters>
+    <param name="reverse.dep.Maven_Build.password.param" value="booking" spec="text validationMode='any' display='normal'" />
+  </parameters>
+  <project-extensions>
+    <extension id="PROJECT_EXT_7" type="versionedSettings">
+      <parameters>
+        <param name="buildSettings" value="ALWAYS_USE_CURRENT" />
+        <param name="credentialsStorageType" value="credentialsJSON" />
+        <param name="enabled" value="true" />
+        <param name="rootId" value="BookingApiPayconiq_HttpsGithubComDariaKrupBookingApiPayconiqRefsHeadsMaster" />
+        <param name="showChanges" value="false" />
+        <param name="twoWaySynchronization" value="false" />
+      </parameters>
+    </extension>
+  </project-extensions>
+  <cleanup />
+</project>
+
