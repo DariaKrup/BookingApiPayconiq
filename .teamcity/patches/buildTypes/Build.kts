@@ -17,4 +17,14 @@ changeBuildType(RelativeId("Build")) {
             password("password.param", "credentialsJSON:c471b542-ee2a-49d0-8361-fb34ffec62c2")
         }
     }
+
+    dependencies {
+        add(AbsoluteId("JavaMavenDemo_Build")) {
+            snapshot {
+                runOnSameAgent = true
+                reuseBuilds = ReuseBuilds.NO
+            }
+        }
+
+    }
 }
