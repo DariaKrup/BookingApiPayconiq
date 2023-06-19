@@ -19,6 +19,12 @@ changeBuildType(RelativeId("Build")) {
     }
 
     dependencies {
+        remove(AbsoluteId("Maven_Build")) {
+            snapshot {
+                reuseBuilds = ReuseBuilds.NO
+            }
+        }
+
         add(AbsoluteId("JavaMavenDemo_Build")) {
             snapshot {
                 runOnSameAgent = true
