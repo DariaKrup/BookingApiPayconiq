@@ -26,6 +26,7 @@ changeProject(DslContext.projectId) {
             amazonEC2CloudImage {
                 id = "PROJECT_EXT_5"
                 profileId = "amazon-2"
+                agentPoolId = "-2"
                 name = "Image Ubuntu"
                 vpcSubnetId = "subnet-0c23f411b0800b216"
                 keyPairName = "daria.krupkina"
