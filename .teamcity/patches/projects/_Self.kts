@@ -2,6 +2,7 @@ package patches.projects
 
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.Project
+import jetbrains.buildServer.configs.kotlin.amazonEC2CloudProfile
 import jetbrains.buildServer.configs.kotlin.ui.*
 
 /*
@@ -16,6 +17,23 @@ changeProject(DslContext.projectId) {
         }
         add {
             password("reverse.dep.*.password.param", "credentialsJSON:21597784-9a41-4aab-a8ee-f2b5315fb112")
+        }
+    }
+
+    features {
+        add {
+            amazonEC2CloudProfile {
+                id = "amazon-2"
+                name = "Cloud Profile AWS"
+                terminateIdleMinutes = 0
+                region = AmazonEC2CloudProfile.Regions.EU_WEST_DUBLIN
+                authType = accessKey {
+                    keyId = "credentialsJSON:c4151395-a0a5-4db6-9697-918ebca829e5"
+                    secretKey = "credentialsJSON:42f04976-3912-4b71-8161-3e9ca9484e7d"
+                }
+                param("terminateTimeOut_checkbox", "false")
+                param("terminate-after-build", "false")
+            }
         }
     }
 }
