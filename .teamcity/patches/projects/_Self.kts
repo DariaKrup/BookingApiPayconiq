@@ -2,6 +2,7 @@ package patches.projects
 
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.Project
+import jetbrains.buildServer.configs.kotlin.amazonEC2CloudImage
 import jetbrains.buildServer.configs.kotlin.amazonEC2CloudProfile
 import jetbrains.buildServer.configs.kotlin.ui.*
 
@@ -22,6 +23,18 @@ changeProject(DslContext.projectId) {
 
     features {
         add {
+            amazonEC2CloudImage {
+                id = "PROJECT_EXT_5"
+                profileId = "amazon-2"
+                name = "Image Ubuntu"
+                vpcSubnetId = "subnet-0c23f411b0800b216"
+                keyPairName = "daria.krupkina"
+                instanceType = "t2.medium"
+                securityGroups = listOf("sg-072d8bfa0626ea2a6")
+                source = Source("ami-07908fe7a17542f6b")
+            }
+        }
+        add {
             amazonEC2CloudProfile {
                 id = "amazon-2"
                 name = "Cloud Profile AWS"
@@ -31,8 +44,8 @@ changeProject(DslContext.projectId) {
                     keyId = "credentialsJSON:c4151395-a0a5-4db6-9697-918ebca829e5"
                     secretKey = "credentialsJSON:42f04976-3912-4b71-8161-3e9ca9484e7d"
                 }
-                param("terminateTimeOut_checkbox", "false")
                 param("terminate-after-build", "false")
+                param("terminateTimeOut_checkbox", "false")
             }
         }
     }
