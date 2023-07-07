@@ -22,9 +22,6 @@ changeBuildType(RelativeId("Build")) {
             password("password.param", "credentialsJSON:c471b542-ee2a-49d0-8361-fb34ffec62c2")
         }
         add {
-            param("parameter_for_dsl", "${DslContext.getParameter("serverUrl", "default")}")
-        }
-        add {
             param("env.JDK_17_0_x64", "%env.JRE_HOME%")
         }
     }
