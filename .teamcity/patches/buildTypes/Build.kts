@@ -16,6 +16,9 @@ changeBuildType(RelativeId("Build")) {
         update {
             password("password.param", "credentialsJSON:c471b542-ee2a-49d0-8361-fb34ffec62c2")
         }
+        add {
+            param("parameter_for_dsl", "")
+        }
     }
 
     dependencies {
