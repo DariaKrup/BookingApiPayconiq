@@ -46,6 +46,7 @@ object BookingApiPayconiq_Build : BuildType({
 
     params {
         param("password.param", "password_booking")
+        param("parameter_for_dsl", "${DslContext.getParameter("serverUrl", "default")}")
     }
 
     vcs {
