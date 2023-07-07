@@ -24,6 +24,9 @@ changeBuildType(RelativeId("Build")) {
         add {
             param("parameter_for_dsl", "")
         }
+        add {
+            param("env.JDK_17_0_x64", "%env.JRE_HOME%")
+        }
     }
 
     dependencies {
