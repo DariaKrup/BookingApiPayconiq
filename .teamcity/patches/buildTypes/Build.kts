@@ -9,6 +9,11 @@ To apply the patch, change the buildType with id = 'Build'
 accordingly, and delete the patch script.
 */
 changeBuildType(RelativeId("Build")) {
+    check(type == BuildTypeSettings.Type.COMPOSITE) {
+        "Unexpected option value: type = $type"
+    }
+    type = BuildTypeSettings.Type.REGULAR
+
     params {
         expect {
             param("password.param", "password_booking")
