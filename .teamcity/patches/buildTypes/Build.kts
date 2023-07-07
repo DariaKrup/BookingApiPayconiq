@@ -28,12 +28,5 @@ changeBuildType(RelativeId("Build")) {
             }
         }
 
-        add(AbsoluteId("JavaMavenDemo_Build")) {
-            snapshot {
-                runOnSameAgent = true
-                reuseBuilds = ReuseBuilds.NO
-            }
-        }
-
     }
 }
