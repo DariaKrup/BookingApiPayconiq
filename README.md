@@ -5,7 +5,8 @@ Link to API: http://restful-booker.herokuapp.com/apidoc/index.html#api-Booking-G
 
 Requirements:
 * ”createBooking” and “getBookingById” endpoints are working;
-* “partialUpdateBooking , “deleteBooking” and “getBookingIds” should be covered with tests.
+* “partialUpdateBooking , “deleteBooking” and “getBookingIds” should be covered with tests;
+* meet standard requirements for JUnit tests.
 
 
 How to use:
