@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.booking</groupId>
-  <artifactId>booking-api-ayconiq</artifactId>
+  <artifactId>booking-api-payconiq</artifactId>
   <version>1.0.0.RELEASE</version>
 
   <name>bookingApiPayconiq</name>
