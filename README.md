@@ -5,7 +5,7 @@
 
 Requirements:
 * ”createBooking” and “getBookingById” endpoints are working;
-* “partialUpdateBooking , “deleteBooking” and “getBookingIds” should be covered with tests;
+* “partialUpdateBooking , “deleteBooking” and “getBookingIds” should be covered with all possible tests;
 * meet standard requirements for JUnit tests.
 
 
