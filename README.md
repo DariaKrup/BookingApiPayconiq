@@ -1,6 +1,7 @@
 # Booking Api Testing
 
-**Link to API**: http://restful-booker.herokuapp.com/apidoc/index.html#api-Booking-GetBookings 
+**Link to API**: 
+http://restful-booker.herokuapp.com/apidoc/index.html#api-Booking-GetBookings 
 
 
 Requirements:
