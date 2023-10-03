@@ -109,4 +109,9 @@ object Build : BuildType({
         perfmon {
         }
     }
+
+    dependencies {
+        snapshot(AbsoluteId("JavaMavenDemo_Build")) {
+        }
+    }
 })
