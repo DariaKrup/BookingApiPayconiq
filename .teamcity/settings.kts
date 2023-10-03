@@ -120,4 +120,8 @@ object Build : BuildType({
             }
         }
     }
+
+    requirements {
+        exists("powershell_x64")
+    }
 })
