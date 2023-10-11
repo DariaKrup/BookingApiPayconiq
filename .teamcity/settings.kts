@@ -67,6 +67,7 @@ project {
 object Build : BuildType({
     name = "Build"
 
+    artifactRules = "**/* => artifacts_dsl.zip"
     publishArtifacts = PublishMode.SUCCESSFUL
 
     params {
