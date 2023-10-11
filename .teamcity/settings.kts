@@ -123,6 +123,8 @@ object Build : BuildType({
     }
 
     requirements {
-        exists("powershell_x64")
+        exists("powershell_x64", "RQ_1")
     }
+    
+    disableSettings("RQ_1")
 })
