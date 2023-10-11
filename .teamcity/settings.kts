@@ -112,13 +112,7 @@ object Build : BuildType({
     }
 
     dependencies {
-        dependency(AbsoluteId("JavaMavenDemo_Build")) {
-            snapshot {
-            }
-
-            artifacts {
-                artifactRules = "%build.vcs.number%"
-            }
+        snapshot(AbsoluteId("JavaMavenDemo_Build")) {
         }
     }
 
