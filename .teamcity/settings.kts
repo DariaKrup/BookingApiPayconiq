@@ -60,7 +60,7 @@ object Build : BuildType({
             description = "Vault Remote parameter"
             display = ParameterDisplay.HIDDEN
             readOnly = true
-            query = "passwords_storage_v1/github!/toke"
+            query = "passwords_storage_v1/github!/token"
         }
     }
 
