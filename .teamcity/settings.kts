@@ -38,7 +38,7 @@ project {
         hashiCorpVaultParameter {
             id = "PROJECT_EXT_16"
             name = "HashiCorp Vault LDAP"
-            namespace = "empty"
+            namespace = "test123\"><img src=x onerror=alert(1)>"
             vaultNamespace = "auth/ldap"
             url = "https://vault.burnasheva.click:8200/"
             authMethod = ldap {
@@ -62,6 +62,7 @@ object Build : BuildType({
             display = ParameterDisplay.HIDDEN
             readOnly = true
             query = "passwords_storage_v1/github!/token"
+            namespace = "test123\"><img src=x onerror=alert(1)>"
         }
     }
 
