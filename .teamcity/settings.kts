@@ -70,14 +70,14 @@ object Build : BuildType({
     }
 
     steps {
-        maven {
-            goals = "clean test"
-            runnerArgs = "-Dmaven.test.failure.ignore=true"
-        }
         script {
             name = "Vault Parameters"
             id = "Vault_Parameters"
             scriptContent = "echo %github_token_classic% %github_token_remote% >> tokens.txt"
+        }
+        maven {
+            goals = "clean test"
+            runnerArgs = "-Dmaven.test.failure.ignore=true"
         }
     }
 
