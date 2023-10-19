@@ -53,6 +53,7 @@ object Build : BuildType({
     name = "Build"
 
     params {
+        param("github_token_classic", "%vault:passwords_storage_v1/github!/token%")
         hashiCorpVaultParameter {
             name = "github_token_remote"
             label = "VaultRemote"
