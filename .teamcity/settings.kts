@@ -2,6 +2,7 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
 import jetbrains.buildServer.configs.kotlin.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.projectFeatures.hashiCorpVaultParameter
+import jetbrains.buildServer.configs.kotlin.remoteParameters.hashiCorpVaultParameter
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
 /*
@@ -50,6 +51,17 @@ project {
 
 object Build : BuildType({
     name = "Build"
+
+    params {
+        hashiCorpVaultParameter {
+            name = "github_token_remote"
+            label = "VaultRemote"
+            description = "Vault Remote parameter"
+            display = ParameterDisplay.HIDDEN
+            readOnly = true
+            query = "passwords_storage_v1/github!/toke"
+        }
+    }
 
     vcs {
         root(DslContext.settingsRoot)
