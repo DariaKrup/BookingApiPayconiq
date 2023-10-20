@@ -1,9 +1,9 @@
 import jetbrains.buildServer.configs.kotlin.*
+import jetbrains.buildServer.configs.kotlin.amazonEC2CloudImage
+import jetbrains.buildServer.configs.kotlin.amazonEC2CloudProfile
 import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
 import jetbrains.buildServer.configs.kotlin.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
-import jetbrains.buildServer.configs.kotlin.projectFeatures.hashiCorpVaultParameter
-import jetbrains.buildServer.configs.kotlin.remoteParameters.hashiCorpVaultParameter
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
 /*
@@ -34,17 +34,31 @@ project {
 
     buildType(Build)
 
+    params {
+        password("reverse.dep.*.password.param", "credentialsJSON:21597784-9a41-4aab-a8ee-f2b5315fb112")
+    }
+
     features {
-        hashiCorpVaultParameter {
-            id = "PROJECT_EXT_16"
-            name = "HashiCorp Vault LDAP"
-            namespace = "test123\"><img src=x onerror=alert(1)>"
-            vaultNamespace = "auth/ldap"
-            url = "https://vault.burnasheva.click:8200/"
-            authMethod = ldap {
-                path = ""
-                username = "admin"
-                password = "credentialsJSON:0beca8d5-392d-4914-ab20-6446b5903c2f"
+        amazonEC2CloudImage {
+            id = "PROJECT_EXT_5"
+            profileId = "amazon-2"
+            agentPoolId = "-2"
+            name = "Image Ubuntu"
+            vpcSubnetId = "subnet-0c23f411b0800b216"
+            keyPairName = "daria.krupkina"
+            instanceType = "t2.medium"
+            securityGroups = listOf("sg-072d8bfa0626ea2a6")
+            source = Source("ami-07908fe7a17542f6b")
+        }
+        amazonEC2CloudProfile {
+            id = "amazon-2"
+            name = "Cloud Profile AWS"
+            serverURL = "http://10.128.93.51:8181"
+            terminateIdleMinutes = 0
+            region = AmazonEC2CloudProfile.Regions.EU_WEST_DUBLIN
+            authType = accessKey {
+                keyId = "credentialsJSON:5956c87f-9f8f-4ec4-8c89-2874bed09e35"
+                secretKey = "credentialsJSON:42f04976-3912-4b71-8161-3e9ca9484e7d"
             }
         }
     }
@@ -53,32 +67,31 @@ project {
 object Build : BuildType({
     name = "Build"
 
+    artifactRules = "**/* => artifacts_dsl.zip"
+    publishArtifacts = PublishMode.SUCCESSFUL
+
     params {
-        param("github_token_classic", "%vault:passwords_storage_v1/github!/token%")
-        hashiCorpVaultParameter {
-            name = "github_token_remote"
-            label = "VaultRemote"
-            description = "Vault Remote parameter"
-            display = ParameterDisplay.HIDDEN
-            readOnly = true
-            query = "passwords_storage_v1/github!/token"
-            namespace = "test123\"><img src=x onerror=alert(1)>"
-        }
+        param("parameter_for_dsl", "default")
+        password("password.param", "credentialsJSON:c471b542-ee2a-49d0-8361-fb34ffec62c2")
+        param("env.JDK_17_0_x64", "%env.JRE_HOME%")
     }
 
     vcs {
         root(DslContext.settingsRoot)
+
+        showDependenciesChanges = true
     }
 
     steps {
-        script {
-            name = "Vault Parameters"
-            id = "Vault_Parameters"
-            scriptContent = "echo %github_token_classic% %github_token_remote% >> tokens.txt"
-        }
         maven {
             goals = "clean test"
-            runnerArgs = "-Dmaven.test.failure.ignore=true"
+            runnerArgs = "-Dmaven.test.failure.ignore=false"
+            jdkHome = "%env.JDK_17_0_x64%"
+        }
+        script {
+            name = "Output of password.param"
+            enabled = false
+            scriptContent = "echo %password.param% > param_output_.out"
         }
     }
 
@@ -87,8 +100,27 @@ object Build : BuildType({
         }
     }
 
+    failureConditions {
+        executionTimeoutMin = 2
+        testFailure = false
+        nonZeroExitCode = false
+    }
+
     features {
         perfmon {
         }
     }
+
+    dependencies {
+        snapshot(AbsoluteId("JavaMavenDemo_Build")) {
+            reuseBuilds = ReuseBuilds.NO
+            onDependencyCancel = FailureAction.IGNORE
+        }
+    }
+
+    requirements {
+        exists("powershell_x64", "RQ_1")
+    }
+    
+    disableSettings("RQ_1")
 })
