@@ -1,4 +1,4 @@
-# Booking Api Tests
+# Booking Api
 
 **Link to API**: 
 http://restful-booker.herokuapp.com/apidoc/index.html#api-Booking-GetBookings 
