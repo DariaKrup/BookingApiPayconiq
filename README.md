@@ -11,7 +11,7 @@ Some requirements:
 
 
 How to use:
-```mvn test``` to run tests.
+```mvn clean test``` to run tests.
 
 
 **Note**: should use current API behaviour as specified (thus some checks are failed).
