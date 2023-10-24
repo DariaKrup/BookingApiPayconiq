@@ -4,7 +4,7 @@
 http://restful-booker.herokuapp.com/apidoc/index.html#api-Booking-GetBookings 
 
 
-Requirements:
+Some requirements:
 * ”createBooking” and “getBookingById” endpoints are working;
 * “partialUpdateBooking , “deleteBooking” and “getBookingIds” should be covered with all possible tests;
 * meet standard requirements for Unit tests.
