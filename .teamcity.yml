@@ -1,0 +1,11 @@
+jobs:
+  Job1:
+    name: Job Maven
+    steps:
+      - type: maven
+        maven-version: defaultProvidedVersion
+        pom-location: pom.xml
+        goals: clean test
+        name: clean test
+    allow-reuse: false
+    checkout-working-directories-only: false
