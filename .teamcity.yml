@@ -1,6 +1,6 @@
 jobs:
   Job1:
-    name: Job Maven
+    name: Job Maven (test only)
     steps:
       - type: maven
         maven-version: defaultProvidedVersion
