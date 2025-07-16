@@ -7,5 +7,20 @@ jobs:
         pom-location: pom.xml
         goals: clean test
         name: clean test
+      - type: script
+        name: echo
+        script-content: echo 'Wow'
+        docker-image: ubuntu:latest
     allow-reuse: false
     checkout-working-directories-only: false
+    parameters:
+      env.param: '%one_more%'
+    files-publication:
+      - path: README.md
+        share-with-jobs: true
+        publish-artifact: true
+parameters:
+  pipeline: parameter
+  one_more: '%pipeline%'
+secrets:
+  pass: credentialsJSON:6095d48b-1521-4b72-968d-5b63c387ba84
