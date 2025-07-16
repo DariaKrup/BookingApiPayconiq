@@ -20,7 +20,7 @@ jobs:
         share-with-jobs: true
         publish-artifact: true
 parameters:
-  pipeline: parameter
+  pipeline: parameter_upd_from_vcs
   one_more: '%pipeline%'
 secrets:
   pass: credentialsJSON:6095d48b-1521-4b72-968d-5b63c387ba84
