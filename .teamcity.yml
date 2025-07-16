@@ -9,7 +9,7 @@ jobs:
         name: clean test
       - type: script
         name: echo
-        script-content: echo 'Wow'
+        script-content: echo '%env.param%'
         docker-image: ubuntu:latest
     allow-reuse: false
     checkout-working-directories-only: false
