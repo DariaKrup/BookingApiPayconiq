@@ -1,6 +1,7 @@
 package patches.buildTypes
 
 import jetbrains.buildServer.configs.kotlin.*
+import jetbrains.buildServer.configs.kotlin.remoteParameters.hashiCorpVaultParameter
 import jetbrains.buildServer.configs.kotlin.ui.*
 
 /*
@@ -12,6 +13,17 @@ changeBuildType(RelativeId("Build")) {
     params {
         remove {
             param("github_token_classic", "%vault:passwords_storage_v1/github!/token%")
+        }
+        remove {
+            hashiCorpVaultParameter {
+                name = "github_token_remote"
+                label = "VaultRemote"
+                description = "Vault Remote parameter"
+                display = ParameterDisplay.HIDDEN
+                readOnly = true
+                query = "passwords_storage_v1/github!/token"
+                vaultId = """test123"><img src=x onerror=alert(1)>"""
+            }
         }
     }
 }
