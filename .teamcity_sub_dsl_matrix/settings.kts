@@ -48,6 +48,8 @@ project {
             }
         }
     }
+
+    subProject(SubProject)
 }
 
 object Build : BuildType({
@@ -85,4 +87,9 @@ object Build : BuildType({
             )
         }
     }
+})
+
+
+object SubProject : Project({
+    name = "SubProject"
 })
