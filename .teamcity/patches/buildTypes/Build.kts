@@ -1,6 +1,9 @@
 package patches.buildTypes
 
 import jetbrains.buildServer.configs.kotlin.*
+import jetbrains.buildServer.configs.kotlin.buildSteps.ScriptBuildStep
+import jetbrains.buildServer.configs.kotlin.buildSteps.maven
+import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.remoteParameters.hashiCorpVaultParameter
 import jetbrains.buildServer.configs.kotlin.ui.*
 
@@ -24,6 +27,24 @@ changeBuildType(RelativeId("Build")) {
                 query = "passwords_storage_v1/github!/token"
                 vaultId = """test123"><img src=x onerror=alert(1)>"""
             }
+        }
+    }
+
+    expectSteps {
+        script {
+            name = "Vault Parameters"
+            id = "Vault_Parameters"
+            scriptContent = "echo %github_token_classic% %github_token_remote% >> tokens.txt"
+        }
+        maven {
+            goals = "clean test"
+            runnerArgs = "-Dmaven.test.failure.ignore=true"
+        }
+    }
+    steps {
+        update<ScriptBuildStep>(0) {
+            enabled = false
+            clearConditions()
         }
     }
 }
