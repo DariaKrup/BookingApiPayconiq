@@ -4,6 +4,7 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildSteps.ScriptBuildStep
 import jetbrains.buildServer.configs.kotlin.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
+import jetbrains.buildServer.configs.kotlin.matrix
 import jetbrains.buildServer.configs.kotlin.remoteParameters.hashiCorpVaultParameter
 import jetbrains.buildServer.configs.kotlin.ui.*
 
@@ -45,6 +46,17 @@ changeBuildType(RelativeId("Build")) {
         update<ScriptBuildStep>(0) {
             enabled = false
             clearConditions()
+        }
+    }
+
+    features {
+        add {
+            matrix {
+                os = listOf(
+                    value("Linux"),
+                    value("Mac OS")
+                )
+            }
         }
     }
 }
