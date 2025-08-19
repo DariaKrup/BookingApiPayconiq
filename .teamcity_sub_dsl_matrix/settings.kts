@@ -32,8 +32,6 @@ version = "2025.07"
 
 project {
 
-    buildType(Build)
-
     features {
         hashiCorpVaultConnection {
             id = "PROJECT_EXT_16"
@@ -51,6 +49,13 @@ project {
 
     subProject(SubProject)
 }
+
+
+object SubProject : Project({
+    name = "SubProject"
+
+    buildType(Build)
+})
 
 object Build : BuildType({
     name = "Build"
@@ -87,9 +92,4 @@ object Build : BuildType({
             )
         }
     }
-})
-
-
-object SubProject : Project({
-    name = "SubProject"
 })
