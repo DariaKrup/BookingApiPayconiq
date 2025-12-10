@@ -1,4 +1,8 @@
 jobs:
   Job1:
     name: Job 1
-    steps: []
+    steps:
+      - type: maven
+        pom-location: pom.xml
+        name: clean test
+        goals: clean test
