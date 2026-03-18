@@ -59,7 +59,6 @@ object BookingApiPayconiqMavenPipeline : Pipeline({
         vcs {
             branchFilter = """
                 +:*
-                +pr:*
             """.trimIndent()
         }
     }
