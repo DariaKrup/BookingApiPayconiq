@@ -14,4 +14,4 @@ How to use:
 ```mvn clean test``` to clean and then run tests.
 
 
-**Note**: should use current API behaviour as specified (thus some checks are failed).
+**Note**: should use current API behaviour as specified (thus some checks are failed, do not fix).
