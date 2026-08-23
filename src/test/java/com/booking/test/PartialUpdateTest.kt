@@ -323,6 +323,15 @@ class PartialUpdateTest : BookingApiTest() {
         }
 
         @Test
+        fun `Should be error when id is negative 2`() {
+            val id = BookingApi.create(booking())
+
+            val response = bookingApi.partialUpdate("-$id", simplePartialRq())
+
+            assertEquals(HttpStatus.SC_METHOD_NOT_ALLOWED, response.statusCode)
+        }
+
+        @Test
         fun `Should be not allowed on non-existing id`() {
             val id = BookingApi.create(booking())
 
