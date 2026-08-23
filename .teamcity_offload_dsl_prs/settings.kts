@@ -40,6 +40,10 @@ object GitHubAppBookingApi : BuildType({
         root(DslContext.settingsRoot)
     }
 
+    params {
+        param("addParameter", "additional")
+    }
+
     steps {
         maven {
             id = "Maven2"

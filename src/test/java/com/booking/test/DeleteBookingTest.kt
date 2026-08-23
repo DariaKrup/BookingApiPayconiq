@@ -21,6 +21,16 @@ class DeleteBookingTest : BookingApiTest() {
     }
 
     @Test
+    fun `Should delete new`() {
+        val id = BookingApi.create(booking())
+
+        val response = bookingApi.delete(id)
+
+        assertEquals(HttpStatus.SC_CREATED, response.statusCode)
+        assertNull(BookingApi.get(id))
+    }
+
+    @Test
     fun `Should be negative when non-existing booking is removed`() {
         val id = BookingApi.create(booking())
         bookingApi.delete(id)
