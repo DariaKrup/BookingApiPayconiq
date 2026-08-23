@@ -50,6 +50,7 @@ object GitHubAppBookingApi : BuildType({
 
     triggers {
         vcs {
+            branchFilter = "+pr:*"
         }
     }
 
