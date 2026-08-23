@@ -40,6 +40,9 @@ object GitHubAppBookingApi : BuildType({
         root(DslContext.settingsRoot)
     }
 
+    params {
+        param("branchToBuild", "dkrupkina/changes-with-dsl")
+    }
     steps {
         maven {
             id = "Maven2"
