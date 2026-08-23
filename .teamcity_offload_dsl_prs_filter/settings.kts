@@ -42,6 +42,10 @@ object GitHubAppBookingApi : BuildType({
         branchFilter = "+:pull/*"
     }
 
+    params {
+        param("addBuilds", "always")
+    }
+    
     steps {
         maven {
             id = "Maven2"
