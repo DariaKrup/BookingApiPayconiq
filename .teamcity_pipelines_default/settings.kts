@@ -29,7 +29,7 @@ version = "2025.114224"
 
 project {
 
-    pipeline(ProjectWithPipeline_BookingApiPayconiqPipeline)
+    pipeline(ProjectWithPipeline_BookingApiPayconiqPipeline
 }
 
 
