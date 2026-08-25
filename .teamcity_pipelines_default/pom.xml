@@ -22,7 +22,7 @@
     </repository>
     <repository>
       <id>teamcity-server</id>
-      <url>https://34.243.179.198:8441/app/dsl-plugins-repository</url>
+      <url>https://34.243.88.198:8441/app/dsl-plugins-repository</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
