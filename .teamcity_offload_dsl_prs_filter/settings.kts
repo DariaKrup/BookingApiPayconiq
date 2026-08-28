@@ -36,6 +36,10 @@ project {
 object GitHubAppBookingApi : BuildType({
     name = "GitHub app: Booking API + PR"
 
+    params {
+        param("buildNumber", "build")
+    }
+
     vcs {
         root(DslContext.settingsRoot)
     }

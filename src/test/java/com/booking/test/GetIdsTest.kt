@@ -25,6 +25,16 @@ class GetIdsTest : BookingApiTest() {
     }
 
     @Test
+    fun `Should include when no filters second`() {
+        val id = BookingApi.create(booking())
+
+        val response = bookingApi.getIds()
+
+        assertEquals(HttpStatus.SC_OK, response.statusCode)
+        assertTrue(response.contains(id))
+    }
+    
+    @Test
     fun `Should not include when non-existing id`() {
         val id = BookingApi.create(booking())
         bookingApi.delete(id)
