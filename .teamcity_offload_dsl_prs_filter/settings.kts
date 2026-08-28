@@ -38,11 +38,6 @@ object GitHubAppBookingApi : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-
-        branchFilter = """
-            +:pull/*
-            +:dkrupkina/*
-        """.trimIndent()
     }
 
     steps {
