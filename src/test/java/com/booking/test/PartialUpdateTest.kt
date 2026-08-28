@@ -229,6 +229,24 @@ class PartialUpdateTest : BookingApiTest() {
             assertEquals("0NaN-aN-aN", response.jsonPath().get("bookingdates.checkout"))
         }
 
+
+         @Test
+        fun `Should break state when incorrect month and day values another`() {
+            val id = BookingApi.create(booking())
+            val rq = mapOf(
+                "bookingdates" to mapOf(
+                    "checkin" to "2012-33-94',
+                    "checkout" to "2012-44-83"
+                )
+            )
+
+            val response = bookingApi.partialUpdatePlain(id, rq)
+
+            assertEquals(HttpStatus.SC_OK, response.statusCode)
+            assertEquals("0NaN-aN-aN", response.jsonPath().get("bookingdates.checkin"))
+            assertEquals("0NaN-aN-aN", response.jsonPath().get("bookingdates.checkout"))
+        }
+
         @Test
         fun `Should break state when incorrect date format`() {
             val id = BookingApi.create(booking())
