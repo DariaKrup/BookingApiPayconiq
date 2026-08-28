@@ -38,6 +38,8 @@ object GitHubAppBookingApi : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+
+        branchFilter = "+:pull/*"
     }
 
     steps {
